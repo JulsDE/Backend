@@ -1,7 +1,7 @@
 package com.example.AufgabeBackend.course_user;
 
 public class CourseUserException extends Exception{
-    public CourseUserException(){
+    public CourseUserException() {
 
     }
 

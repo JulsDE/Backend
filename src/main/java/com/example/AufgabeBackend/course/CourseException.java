@@ -1,6 +1,6 @@
 package com.example.AufgabeBackend.course;
 
-public class CourseException extends Exception{
+public class CourseException extends Exception {
 
     public CourseException(){
 

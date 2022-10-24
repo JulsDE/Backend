@@ -1,9 +1,8 @@
 package com.example.AufgabeBackend.course;
 
-import com.example.AufgabeBackend.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
+
 
 @RestController
 @RequestMapping(path = "/course")
@@ -23,17 +22,22 @@ public class CourseController {
 
     @PutMapping(path = "/{courseId}")
     public void updateCourse(@PathVariable Long courseId, Course courseUpdate){
-        try{
+        try {
             courseService.updateCourse(courseId, courseUpdate);
         }
-        catch(CourseException exception){
+        catch(CourseException exception) {
             System.out.println(exception.getMessage());
         }
     }
 
     @DeleteMapping("{courseId}")
     public void deleteCourse(@PathVariable Long courseId){
-
+        try {
+            this.courseService.deleteCourse(courseId);
+        }
+        catch(CourseException exception) {
+            System.out.println(exception);
+        }
     }
 
     @GetMapping("/{courseId}")

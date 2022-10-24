@@ -21,7 +21,7 @@ public class CourseUserService {
 
 
     @Autowired
-    public CourseUserService(CourseRepository courseRepository, UserRepository userRepository){
+    public CourseUserService(CourseRepository courseRepository, UserRepository userRepository) {
         this.courseRepository = courseRepository;
         this.userRepository = userRepository;
     }
@@ -48,7 +48,7 @@ public class CourseUserService {
         }
     }
 
-    public void assignmentManagement(boolean toAssign){
+    public void assignmentManagement(boolean toAssign) {
         Course courseInstance = this.optionalCourse.get();
         User userInstance = this.optionalUser.get();
         if(toAssign){
@@ -63,7 +63,7 @@ public class CourseUserService {
         userRepository.save(userInstance);
     }
 
-    public Set<Course> getCoursesFromUser(Long userId){
+    public Set<Course> getCoursesFromUser(Long userId) {
         try{
             if(isUserPresent(userId)){
                 User user = this.optionalUser.get();
@@ -76,7 +76,7 @@ public class CourseUserService {
         return null;
     }
 
-    public Set<User> getUserFromCourse(Long courseId){
+    public Set<User> getUserFromCourse(Long courseId) {
         try{
             if(isCoursePresent(courseId)){
                 Course course = this.optionalCourse.get();
@@ -90,7 +90,7 @@ public class CourseUserService {
     }
 
 
-    public boolean isCoursePresent(Long courseId) throws CourseUserException{
+    public boolean isCoursePresent(Long courseId) throws CourseUserException {
         this.optionalCourse = courseRepository.findById(courseId);
         if(!this.optionalCourse.isPresent()){
             throw new CourseUserException("Course with id " + courseId + " was not found");
@@ -98,7 +98,7 @@ public class CourseUserService {
         return true;
     }
 
-    public boolean isUserPresent(Long userId) throws CourseUserException{
+    public boolean isUserPresent(Long userId) throws CourseUserException {
         this.optionalUser = userRepository.findById(userId);
         if(!this.optionalUser.isPresent()){
             throw new CourseUserException("User with id " + userId + " was not found");

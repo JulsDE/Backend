@@ -3,10 +3,8 @@ package com.example.AufgabeBackend.user;
 import com.example.AufgabeBackend.course.Course;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -28,11 +26,11 @@ public class User {
     private Set<Course> assignedCourses = new HashSet<>();
 
 
-    public User(){
+    public User() {
 
     }
 
-    public User(String name, String firstname, LocalDate dateOfBirth){
+    public User(String name, String firstname, LocalDate dateOfBirth) {
         this.name = name;
         this.firstname = firstname;
         this.dateOfBirth = dateOfBirth;
@@ -42,7 +40,7 @@ public class User {
         this.assignedCourses.add(courseToAssign);
     }
 
-    public void unassignFromCourse(Course courseToUnassign){
+    public void unassignFromCourse(Course courseToUnassign) {
         if(this.assignedCourses.contains(courseToUnassign)) {
             this.assignedCourses.remove(courseToUnassign);
         }

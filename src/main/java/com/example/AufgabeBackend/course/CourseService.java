@@ -5,8 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-
-
 import java.util.Optional;
 
 @Service
@@ -66,7 +64,7 @@ public class CourseService {
 
 
 
-    public boolean isCoursePresent(Long courseId) throws ResponseStatusException{
+    public boolean isCoursePresent(Long courseId) throws ResponseStatusException {
         this.optionalCourse = courseRepository.findById(courseId);
         if(optionalCourse.isPresent()) {
             return true;
