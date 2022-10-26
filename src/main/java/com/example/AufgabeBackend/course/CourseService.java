@@ -1,6 +1,5 @@
 package com.example.AufgabeBackend.course;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -24,14 +23,14 @@ public class CourseService {
     }
 
 
-    public void updateCourse(Long courseId, Course courseUpdate) throws CourseException {
+    public void updateCourse(Long courseId, Course courseUpdate) {
         Optional<Course> course = courseRepository.findById(courseId);
-        if(course.isPresent()) {
-            Course courseInstance = course.get();
-            updateCourseProperties(courseInstance, courseUpdate);
-            courseRepository.save(courseInstance);
+        if(!course.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Course could not be update");
         }
-        throw new CourseException("Error with updating the course");
+        Course courseInstance = course.get();
+        updateCourseProperties(courseInstance, courseUpdate);
+        courseRepository.save(courseInstance);
 
     }
 
@@ -43,34 +42,25 @@ public class CourseService {
         courseToBeUpdated.setEnd(courseUpdate.getEnd());
     }
 
-    public void deleteCourse(Long courseId) throws CourseException {
-        Optional<Course> course = courseRepository.findById(courseId);
-        if(!course.isPresent()) {
-            throw new CourseException("Course with " + courseId + " does not exist");
+    public void deleteCourse(Long courseId) {
+        if(isCoursePresent(courseId)) {
+            courseRepository.deleteById(courseId);
         }
-        courseRepository.deleteById(courseId);
     }
 
     public Course getCourse(Long courseId) {
-        try {
-            if(isCoursePresent(courseId)) {
-                return this.optionalCourse.get();
-            }
-        } catch(ResponseStatusException e) {
-            System.out.println(e);
+        if(isCoursePresent(courseId)) {
+            return this.optionalCourse.get();
         }
         return null;
     }
 
-
-
-    public boolean isCoursePresent(Long courseId) throws ResponseStatusException {
+    public boolean isCoursePresent(Long courseId) {
         this.optionalCourse = courseRepository.findById(courseId);
         if(optionalCourse.isPresent()) {
             return true;
         }
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST ,"Course was not found!");
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Course with the id " + courseId +" was not found");
     }
-
 
 }

@@ -5,7 +5,10 @@ import com.example.AufgabeBackend.course.CourseRepository;
 import com.example.AufgabeBackend.user.User;
 import com.example.AufgabeBackend.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+
 import java.util.Optional;
 import java.util.Set;
 
@@ -26,25 +29,16 @@ public class CourseUserService {
         this.userRepository = userRepository;
     }
 
+
     public void addUserToCourse(Long courseId, User userToAssign) {
-        try{
-            if(isCoursePresent(courseId) && isUserPresent(userToAssign.getUserId())) {
-                assignmentManagement(true);
-            }
-        }
-        catch(CourseUserException exception){
-            logException(exception);
+        if(isCoursePresent(courseId) && isUserPresent(userToAssign.getUserId())) {
+            assignmentManagement(true);
         }
     }
 
     public void unassignUserFromCourse(Long courseId, User userToDelete) {
-        try{
-            if(isCoursePresent(courseId) && isUserPresent(userToDelete.getUserId())) {
-                assignmentManagement(false);
-            }
-        }
-        catch(CourseUserException exception){
-            logException(exception);
+        if(isCoursePresent(courseId) && isUserPresent(userToDelete.getUserId())) {
+            assignmentManagement(false);
         }
     }
 
@@ -64,51 +58,38 @@ public class CourseUserService {
     }
 
     public Set<Course> getCoursesFromUser(Long userId) {
-        try{
-            if(isUserPresent(userId)){
-                User user = this.optionalUser.get();
-                return user.getAssignedCourses();
-            }
-        }
-        catch(CourseUserException exception){
-            logException(exception);
+        if(isUserPresent(userId)){
+            User user = this.optionalUser.get();
+            return user.getAssignedCourses();
         }
         return null;
     }
 
     public Set<User> getUserFromCourse(Long courseId) {
-        try{
-            if(isCoursePresent(courseId)){
-                Course course = this.optionalCourse.get();
-                return course.getAssignedUsers();
-            }
-        }
-        catch(CourseUserException exception){
-            logException(exception);
+        if(isCoursePresent(courseId)){
+            Course course = this.optionalCourse.get();
+            return course.getAssignedUsers();
         }
         return null;
     }
 
 
-    public boolean isCoursePresent(Long courseId) throws CourseUserException {
+
+
+    public boolean isCoursePresent(Long courseId) {
         this.optionalCourse = courseRepository.findById(courseId);
-        if(!this.optionalCourse.isPresent()){
-            throw new CourseUserException("Course with id " + courseId + " was not found");
+        if(this.optionalCourse.isPresent()){
+            return true;
         }
-        return true;
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Course with id "+ courseId + " not found");
     }
 
-    public boolean isUserPresent(Long userId) throws CourseUserException {
+    public boolean isUserPresent(Long userId) {
         this.optionalUser = userRepository.findById(userId);
-        if(!this.optionalUser.isPresent()){
-            throw new CourseUserException("User with id " + userId + " was not found");
+        if(this.optionalUser.isPresent()){
+           return true;
         }
-        return true;
-    }
-
-
-    public void logException(Exception e){
-        System.out.println(e.getMessage());
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User with id "+ userId + " not found");
     }
 
 }

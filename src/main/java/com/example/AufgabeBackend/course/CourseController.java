@@ -21,23 +21,14 @@ public class CourseController {
     }
 
     @PutMapping(path = "/{courseId}")
-    public void updateCourse(@PathVariable Long courseId, Course courseUpdate){
-        try {
-            courseService.updateCourse(courseId, courseUpdate);
-        }
-        catch(CourseException exception) {
-            System.out.println(exception.getMessage());
-        }
+    public void updateCourse(@PathVariable Long courseId, @RequestBody Course courseUpdate){
+        courseService.updateCourse(courseId, courseUpdate);
     }
 
     @DeleteMapping("{courseId}")
     public void deleteCourse(@PathVariable Long courseId){
-        try {
-            this.courseService.deleteCourse(courseId);
-        }
-        catch(CourseException exception) {
-            System.out.println(exception);
-        }
+        this.courseService.deleteCourse(courseId);
+
     }
 
     @GetMapping("/{courseId}")

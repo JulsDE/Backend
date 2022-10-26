@@ -1,45 +1,60 @@
 package com.example.AufgabeBackend.course_user;
 
+import com.example.AufgabeBackend.course.Course;
 import com.example.AufgabeBackend.course.CourseRepository;
 import com.example.AufgabeBackend.user.User;
 import com.example.AufgabeBackend.user.UserRepository;
-import org.junit.Assert;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import javax.transaction.Transactional;
-import java.util.Set;
+import java.time.LocalDate;
+import static org.mockito.Mockito.verify;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 class CourseUserServiceTest {
 
-    @Autowired
+    @Mock
     private CourseRepository courseRepository;
-    @Autowired
+    @Mock
     private UserRepository userRepository;
 
     private CourseUserService courseUserService;
+    private static final Long ID = Long.valueOf(1);
 
     @BeforeEach
-    void setUp(){
-        this.courseUserService = new CourseUserService(this.courseRepository, this.userRepository);
+    void setUp() {
+        this.courseUserService = new CourseUserService(courseRepository, userRepository);
     }
+
+
 
     @Test
     @Transactional
     void testAddUserToCourse() {
         //given
-        Long id = Long.valueOf(1);
-        User userInstance = this.userRepository.findById(id).orElse(null);;
+        Course course = new Course(
+                "English",
+                "A course to learn english",
+                "Language",
+                LocalDate.of(2022,12, 12),
+                LocalDate.of(2022, 12, 23)
+        );
+        course.setCourseId(ID);
+        User user = new User(
+                "Mustermann",
+                "Max",
+                LocalDate.of(2000, 02, 02)
+        );
         //when
-        this.courseUserService.addUserToCourse(id, userInstance);
+        courseUserService.addUserToCourse(course.getCourseId(), user);
+        System.out.println(course.getCourseId());
         //then
-        Set<User> users = courseUserService.getUserFromCourse(id);
-        Assert.assertTrue(users != null && users.size() > 0);
-        Assert.assertTrue(users.contains(userInstance));
+        verify(this.courseRepository).save(course);
+        verify(this.userRepository).save(user);
+
     }
 }
