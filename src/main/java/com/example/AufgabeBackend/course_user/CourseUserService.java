@@ -73,9 +73,6 @@ public class CourseUserService {
         return null;
     }
 
-
-
-
     public boolean isCoursePresent(Long courseId) {
         this.optionalCourse = courseRepository.findById(courseId);
         if(this.optionalCourse.isPresent()){

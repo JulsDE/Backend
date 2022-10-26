@@ -5,6 +5,7 @@ import com.example.AufgabeBackend.course.CourseRepository;
 import com.example.AufgabeBackend.user.User;
 import com.example.AufgabeBackend.user.UserRepository;
 
+import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,6 +13,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.util.Optional;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
@@ -31,9 +35,7 @@ class CourseUserServiceTest {
     }
 
 
-
     @Test
-    @Transactional
     void testAddUserToCourse() {
         //given
         Course course = new Course(
@@ -49,12 +51,18 @@ class CourseUserServiceTest {
                 "Max",
                 LocalDate.of(2000, 02, 02)
         );
+        user.setUserId(ID);
+
+        given(courseRepository.findById(anyLong())).willReturn(Optional.of(course));
+        given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
+
         //when
-        courseUserService.addUserToCourse(course.getCourseId(), user);
-        System.out.println(course.getCourseId());
+        courseUserService.addUserToCourse(ID, user);
+
         //then
         verify(this.courseRepository).save(course);
         verify(this.userRepository).save(user);
-
+        Assert.assertTrue(user.getAssignedCourses().contains(course));
+        Assert.assertTrue(course.getAssignedUsers().contains(user));
     }
 }
