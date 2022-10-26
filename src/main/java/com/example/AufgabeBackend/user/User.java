@@ -78,8 +78,6 @@ public class User {
         this.dateOfBirth = dateOfBirth;
     }
 
-
-
     public Set<Course> getAssignedCourses() {
         return assignedCourses;
     }

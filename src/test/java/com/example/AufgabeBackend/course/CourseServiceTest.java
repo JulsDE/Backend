@@ -1,6 +1,5 @@
 package com.example.AufgabeBackend.course;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,12 +20,7 @@ class CourseServiceTest {
 
     @BeforeEach
     void setUp() {
-        underTest = new CourseService(courseRepository);
-    }
-
-    @AfterEach
-    void tearDown(){
-        courseRepository.deleteAll();
+        this.underTest = new CourseService(courseRepository);
     }
 
     @Test
@@ -41,12 +35,12 @@ class CourseServiceTest {
         );
 
         //when
-        underTest.createCourse(course);
+        this.underTest.createCourse(course);
 
         //then
         ArgumentCaptor<Course> courseArgumentCaptor = ArgumentCaptor.forClass(Course.class);
 
-        verify(courseRepository).save(courseArgumentCaptor.capture());
+        verify(this.courseRepository).save(courseArgumentCaptor.capture());
         Course capturedCourse = courseArgumentCaptor.getValue();
         assertThat(capturedCourse).isEqualTo(course);
     }

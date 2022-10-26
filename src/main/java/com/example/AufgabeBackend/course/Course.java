@@ -36,9 +36,9 @@ public class Course {
     private Set<User> assignedUsers = new HashSet<>();
 
 
-public Course() {
+    public Course() {
 
-}
+    }
 
     public Course(String title, String description, String category, LocalDate start, LocalDate end) {
         this.title = title;

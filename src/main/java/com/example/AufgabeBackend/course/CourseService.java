@@ -22,19 +22,16 @@ public class CourseService {
         courseRepository.save(newCourse);
     }
 
-
     public void updateCourse(Long courseId, Course courseUpdate) {
-        Optional<Course> course = courseRepository.findById(courseId);
-        if(!course.isPresent()) {
+        if(!isCoursePresent(courseId)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Course could not be update");
         }
-        Course courseInstance = course.get();
+        Course courseInstance = this.optionalCourse.get();
         updateCourseProperties(courseInstance, courseUpdate);
         courseRepository.save(courseInstance);
-
     }
 
-    public void updateCourseProperties(Course courseToBeUpdated, Course courseUpdate) {
+    private void updateCourseProperties(Course courseToBeUpdated, Course courseUpdate) {
         courseToBeUpdated.setTitle(courseUpdate.getTitle());
         courseToBeUpdated.setDescription(courseUpdate.getDescription());
         courseToBeUpdated.setCategory(courseUpdate.getCategory());
@@ -55,12 +52,12 @@ public class CourseService {
         return null;
     }
 
-    public boolean isCoursePresent(Long courseId) {
+    private boolean isCoursePresent(Long courseId) {
         this.optionalCourse = courseRepository.findById(courseId);
         if(optionalCourse.isPresent()) {
             return true;
         }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Course with the id " + courseId +" was not found");
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Course with the id " + courseId + " was not found");
     }
 
 }

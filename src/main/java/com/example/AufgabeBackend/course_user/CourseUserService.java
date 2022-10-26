@@ -42,14 +42,14 @@ public class CourseUserService {
         }
     }
 
-    public void assignmentManagement(boolean toAssign) {
+    private void assignmentManagement(boolean toAssign) {
         Course courseInstance = this.optionalCourse.get();
         User userInstance = this.optionalUser.get();
-        if(toAssign){
+        if(toAssign) {
             courseInstance.assignUser(userInstance);
             userInstance.assignToCourse(courseInstance);
         }
-        else{
+        else {
             courseInstance.unassignUser(userInstance);
             userInstance.unassignFromCourse(courseInstance);
         }
@@ -58,7 +58,7 @@ public class CourseUserService {
     }
 
     public Set<Course> getCoursesFromUser(Long userId) {
-        if(isUserPresent(userId)){
+        if(isUserPresent(userId)) {
             User user = this.optionalUser.get();
             return user.getAssignedCourses();
         }
@@ -66,14 +66,14 @@ public class CourseUserService {
     }
 
     public Set<User> getUserFromCourse(Long courseId) {
-        if(isCoursePresent(courseId)){
+        if(isCoursePresent(courseId)) {
             Course course = this.optionalCourse.get();
             return course.getAssignedUsers();
         }
         return null;
     }
 
-    public boolean isCoursePresent(Long courseId) {
+    private boolean isCoursePresent(Long courseId) {
         this.optionalCourse = courseRepository.findById(courseId);
         if(this.optionalCourse.isPresent()){
             return true;
@@ -81,7 +81,7 @@ public class CourseUserService {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Course with id "+ courseId + " not found");
     }
 
-    public boolean isUserPresent(Long userId) {
+    private boolean isUserPresent(Long userId) {
         this.optionalUser = userRepository.findById(userId);
         if(this.optionalUser.isPresent()){
            return true;

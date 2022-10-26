@@ -4,14 +4,12 @@ import com.example.AufgabeBackend.course.Course;
 import com.example.AufgabeBackend.course.CourseRepository;
 import com.example.AufgabeBackend.user.User;
 import com.example.AufgabeBackend.user.UserRepository;
-
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.Optional;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -53,11 +51,11 @@ class CourseUserServiceTest {
         );
         user.setUserId(ID);
 
-        given(courseRepository.findById(anyLong())).willReturn(Optional.of(course));
-        given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
+        given(this.courseRepository.findById(anyLong())).willReturn(Optional.of(course));
+        given(this.userRepository.findById(anyLong())).willReturn(Optional.of(user));
 
         //when
-        courseUserService.addUserToCourse(ID, user);
+        this.courseUserService.addUserToCourse(ID, user);
 
         //then
         verify(this.courseRepository).save(course);
